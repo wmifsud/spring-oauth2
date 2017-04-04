@@ -1,4 +1,4 @@
-package com.oauth2.springmvc.service;
+package com.oauth2.service;
 
 import com.oauth2.entity.Authority;
 import com.oauth2.entity.UserDetails;

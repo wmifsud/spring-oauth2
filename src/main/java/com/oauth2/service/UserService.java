@@ -1,6 +1,6 @@
-package com.oauth2.springmvc.service;
+package com.oauth2.service;
 
-import com.oauth2.springmvc.model.User;
+import com.oauth2.model.User;
 
 import java.util.List;
 

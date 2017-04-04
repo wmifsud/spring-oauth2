@@ -41,14 +41,15 @@
 			<artifactId>spring-security-oauth2</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-redis</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-		</dependency>
+        <!-- Dependencies required if redis token store is to be used -->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.data</groupId>-->
+			<!--<artifactId>spring-data-redis</artifactId>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>redis.clients</groupId>-->
+			<!--<artifactId>jedis</artifactId>-->
+		<!--</dependency>-->
 
 		<!-- database connection pool -->
 		<dependency>
@@ -92,6 +93,20 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>${spring.boot.maven.plugin.version}</version>
+                <!-- repackage required to make application executable -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- executable required to make application executable -->
+                    <executable>true</executable>
+                    <finalName>spring-oauth2</finalName>
+                    <mainClass>com.oauth2.Main</mainClass>
+                </configuration>
 			</plugin>
 		</plugins>
 	</build>

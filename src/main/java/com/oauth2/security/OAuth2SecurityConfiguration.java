@@ -1,10 +1,9 @@
-package com.oauth2.springmvc.security;
+package com.oauth2.security;
 
-import com.oauth2.springmvc.service.UserDetailsServiceImpl;
+import com.oauth2.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,7 +17,7 @@ import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
 @Configuration
 @EnableWebSecurity
@@ -50,16 +49,25 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public JedisConnectionFactory jedisConnectionFactory()
-    {
-        return new JedisConnectionFactory();
-    }
+    // To activate redis token store functionality use below 2 beans
+    // and remove in memory token store.
+
+//    @Bean
+//    public JedisConnectionFactory jedisConnectionFactory()
+//    {
+//        return new JedisConnectionFactory();
+//    }
+
+//    @Bean
+//    public TokenStore tokenStore(JedisConnectionFactory jedisConnectionFactory)
+//    {
+//        return new RedisTokenStore(jedisConnectionFactory);
+//    }
 
     @Bean
-    public TokenStore tokenStore(JedisConnectionFactory jedisConnectionFactory)
+    public TokenStore tokenStore()
     {
-        return new RedisTokenStore(jedisConnectionFactory);
+        return new InMemoryTokenStore();
     }
 
     @Bean

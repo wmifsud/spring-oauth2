@@ -1,6 +1,6 @@
-package com.oauth2.springmvc.security;
+package com.oauth2.security;
 
-import com.oauth2.springmvc.service.ClientDetailsServiceImpl;
+import com.oauth2.service.ClientDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;

@@ -1,7 +1,7 @@
-package com.oauth2.springmvc.controller;
+package com.oauth2.controller;
 
-import com.oauth2.springmvc.model.User;
-import com.oauth2.springmvc.service.UserService;
+import com.oauth2.model.User;
+import com.oauth2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

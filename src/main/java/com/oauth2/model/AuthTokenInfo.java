@@ -1,4 +1,4 @@
-package com.oauth2.springmvc.model;
+package com.oauth2.model;
 
 public class AuthTokenInfo
 {

@@ -18,7 +18,7 @@ import java.util.Set;
     }
 )
 @Entity
-@Table(name = "user_details", schema = "external")
+@Table(name = "user_details", schema = "oauth2")
 public class UserDetails
 {
     private Long id;
@@ -35,7 +35,7 @@ public class UserDetails
     (
         name = "userDetailsGenerator",
         strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = @Parameter(name = "sequence_name", value = "external.user_details_id_seq")
+        parameters = @Parameter(name = "sequence_name", value = "oauth2.user_details_id_seq")
     )
     public Long getId()
     {
@@ -83,7 +83,7 @@ public class UserDetails
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "client_details_user_details_map",
-            schema = "external",
+            schema = "oauth2",
             joinColumns =
             @JoinColumn(name = "user_details_id", referencedColumnName = "id"),
             inverseJoinColumns =
@@ -101,7 +101,7 @@ public class UserDetails
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_details_authority_map",
-            schema = "external",
+            schema = "oauth2",
             joinColumns =
             @JoinColumn(name = "user_details_id", referencedColumnName = "id"),
             inverseJoinColumns =

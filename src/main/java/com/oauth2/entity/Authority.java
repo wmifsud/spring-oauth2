@@ -9,7 +9,7 @@ import javax.persistence.*;
  * @author waylon on 22/03/2017.
  */
 @Entity
-@Table(name = "authority", schema = "external")
+@Table(name = "authority", schema = "oauth2")
 public class Authority
 {
     private Long id;
@@ -22,7 +22,7 @@ public class Authority
     (
         name = "authorityGenerator",
         strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = @Parameter(name = "sequence_name", value = "external.authority_id_seq")
+        parameters = @Parameter(name = "sequence_name", value = "oauth2.authority_id_seq")
     )
     public Long getId()
     {

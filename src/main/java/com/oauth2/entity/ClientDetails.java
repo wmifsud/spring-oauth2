@@ -9,7 +9,7 @@ import javax.persistence.*;
  * @author waylon on 21/03/2017.
  */
 @Entity
-@Table(name = "client_details", schema = "external")
+@Table(name = "client_details", schema = "oauth2")
 public class ClientDetails
 {
     private Long id;
@@ -27,7 +27,7 @@ public class ClientDetails
     (
         name = "clientDetailsGenerator",
         strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = @Parameter(name = "sequence_name", value = "external.client_details_id_seq")
+        parameters = @Parameter(name = "sequence_name", value = "oauth2.client_details_id_seq")
     )
     public Long getId()
     {

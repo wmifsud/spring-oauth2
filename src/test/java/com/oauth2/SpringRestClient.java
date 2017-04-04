@@ -1,7 +1,7 @@
 package com.oauth2;
 
-import com.oauth2.springmvc.model.AuthTokenInfo;
-import com.oauth2.springmvc.model.User;
+import com.oauth2.model.AuthTokenInfo;
+import com.oauth2.model.User;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.http.*;
 import org.springframework.util.Assert;
