@@ -18,7 +18,7 @@ public class SampleRestController
 {
 
     @Autowired
-    UserService userService;  //Service which will do all data retrieval/manipulation work
+    private UserService userService;  //Service which will do all data retrieval/manipulation work
 
 
     //-------------------Retrieve All Users--------------------------------------------------------

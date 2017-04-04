@@ -1,5 +1,6 @@
 package com.oauth2.springmvc.security;
 
+import com.oauth2.springmvc.service.ClientDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,6 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter
 {
-
     @Autowired
     private TokenStore tokenStore;
 
@@ -25,22 +25,16 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     private UserApprovalHandler userApprovalHandler;
 
     @Autowired
+    private ClientDetailsServiceImpl clientDetailsService;
+
+    @Autowired
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
-    //
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception
     {
-
-        clients.inMemory()
-               .withClient("my-trusted-client")
-               .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
-               .authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
-               .scopes("read", "write", "trust")
-               .secret("secret")
-               .accessTokenValiditySeconds(120).//Access token is only valid for 2 minutes.
-                                                        refreshTokenValiditySeconds(600);//Refresh token is only valid for 10 minutes.
+        clients.withClientDetails(clientDetailsService);
     }
 
     @Override
