@@ -6,7 +6,7 @@ DROP USER IF EXISTS oauth2;
 
 CREATE schema oauth2;
 
-CREATE USER oauth2;
+CREATE USER oauth2 WITH PASSWORD 'oauth2';
 
 CREATE TABLE oauth2.client_details
 (
