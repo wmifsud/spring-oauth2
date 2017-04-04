@@ -50,6 +50,3 @@ Sample JSON Response
       "expires_in": 119,
       "scope": "read write trust"
     }
-
-
-Logs are written into the /logs/oauth2/ directory under the name oauth2.log all configured in logback.xml
