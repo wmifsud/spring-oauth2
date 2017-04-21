@@ -3,6 +3,7 @@
 This system lets you retrieve a list of users provided you have the required permissions to do so.
 
 Installation.
+
     1. Import postman OAUTH2_example.
     2. Run "mvn clean install -Pdocker"
     Note that tomcat is set to receive requests on port 9080.
