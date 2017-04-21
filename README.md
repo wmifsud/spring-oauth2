@@ -2,11 +2,10 @@
 
 This system lets you retrieve a list of users provided you have the required permissions to do so.
 
-Before starting app.
-1. Execute schema.sql file on localhost postgres database.
-2. Import postman OAUTH2_example.
-3. Run mvn clean install.
-4. Start application by running ./target/spring-oauth2.jar
+Installation.
+    1. Import postman OAUTH2_example.
+    2. Run "mvn clean install -Pdocker"
+    Note that tomcat is set to receive requests on port 9080.
 
 How-to
 Fetch new token from Spring Security OAuth2 server.
