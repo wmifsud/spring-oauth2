@@ -42,15 +42,15 @@
 			<artifactId>spring-security-oauth2</artifactId>
 		</dependency>
 
-		<!-- Dependencies required if redis token store is to be used -->
-		<!--<dependency>-->
-		<!--<groupId>org.springframework.data</groupId>-->
-		<!--<artifactId>spring-data-redis</artifactId>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-		<!--<groupId>redis.clients</groupId>-->
-		<!--<artifactId>jedis</artifactId>-->
-		<!--</dependency>-->
+		<!-- redis token store dependencies -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
 
 		<!-- database connection pool -->
 		<dependency>
@@ -145,6 +145,7 @@
 									<run>
 										<links>
 											<link>spring-oauth2-db</link>
+											<link>spring-oauth2-redis</link>
 										</links>
 										<ports>
 											<port>9080:9080</port>
@@ -166,6 +167,16 @@
 										<wait>
 											<log>database system is ready to accept connections</log>
 											<time>20000</time>
+										</wait>
+									</run>
+								</image>
+								<image>
+									<alias>spring-oauth2-redis</alias>
+									<name>redis:3.2.8</name>
+									<run>
+										<wait>
+											<log>The server is now ready to accept connections on port</log>
+											<time>5000</time>
 										</wait>
 									</run>
 								</image>

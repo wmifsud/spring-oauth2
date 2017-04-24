@@ -2,8 +2,10 @@ package com.oauth2.security;
 
 import com.oauth2.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,7 +19,7 @@ import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +27,12 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter
 {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Value("${redis.host.name}")
+    private String redisHostName;
+
+    @Value("${redis.port}")
+    private Integer redisPort;
 
     @Autowired
     public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception
@@ -49,25 +57,20 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter
         return super.authenticationManagerBean();
     }
 
-    // To activate redis token store functionality use below 2 beans
-    // and remove in memory token store.
+    @Bean
+    public JedisConnectionFactory jedisConnectionFactory()
+    {
+        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
+        jedisConnectionFactory.setHostName(redisHostName);
+        jedisConnectionFactory.setPort(redisPort);
 
-//    @Bean
-//    public JedisConnectionFactory jedisConnectionFactory()
-//    {
-//        return new JedisConnectionFactory();
-//    }
-
-//    @Bean
-//    public TokenStore tokenStore(JedisConnectionFactory jedisConnectionFactory)
-//    {
-//        return new RedisTokenStore(jedisConnectionFactory);
-//    }
+        return jedisConnectionFactory;
+    }
 
     @Bean
-    public TokenStore tokenStore()
+    public TokenStore tokenStore(JedisConnectionFactory jedisConnectionFactory)
     {
-        return new InMemoryTokenStore();
+        return new RedisTokenStore(jedisConnectionFactory);
     }
 
     @Bean
