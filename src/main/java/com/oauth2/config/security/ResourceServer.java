@@ -1,4 +1,4 @@
-package com.oauth2.security;
+package com.oauth2.config.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHand
 
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
+public class ResourceServer extends ResourceServerConfigurerAdapter
 {
 
     private static final String RESOURCE_ID = "my_rest_api";

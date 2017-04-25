@@ -1,4 +1,4 @@
-package com.oauth2.security;
+package com.oauth2.config.security;
 
 import com.oauth2.service.ClientDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 // auth server class which will require client and secret for app to app authentication.
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter
+public class AuthorizationServer extends AuthorizationServerConfigurerAdapter
 {
     @Autowired
     private TokenStore tokenStore;
