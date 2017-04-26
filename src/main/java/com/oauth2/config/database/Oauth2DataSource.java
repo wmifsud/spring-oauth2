@@ -1,4 +1,4 @@
-package com.oauth2;
+package com.oauth2.config.database;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,8 +16,8 @@ import javax.sql.DataSource;
 @EntityScan(basePackages = "com.oauth2.entity")
 @EnableJpaRepositories(
         basePackages = "com.oauth2.repository")
-public class SampleDataSource
-{
+public class Oauth2DataSource {
+
     @Value("${hikari.transaction.isolation}")
     private String transactionIsolation;
 
@@ -73,8 +73,7 @@ public class SampleDataSource
     private int leakDetectionThreshold;
 
     @Bean
-    public DataSource dataSource()
-    {
+    public DataSource dataSource() {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setTransactionIsolation(transactionIsolation);
         dataSource.setMaximumPoolSize(maxPoolSize);

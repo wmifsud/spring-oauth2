@@ -5,8 +5,7 @@ import com.oauth2.model.User;
 import java.util.List;
 
 
-public interface UserService
-{
+public interface UserService {
 
     User findById(long id);
 

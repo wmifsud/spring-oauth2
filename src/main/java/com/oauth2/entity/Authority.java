@@ -10,38 +10,35 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "authority", schema = "oauth2")
-public class Authority
-{
+public class Authority {
+
     private Long id;
+
     private String authority;
 
     @Id
     @Column(name = "id")
     @GeneratedValue(generator = "authorityGenerator")
     @GenericGenerator
-    (
-        name = "authorityGenerator",
-        strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = @Parameter(name = "sequence_name", value = "oauth2.authority_id_seq")
-    )
-    public Long getId()
-    {
+            (
+                    name = "authorityGenerator",
+                    strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+                    parameters = @Parameter(name = "sequence_name", value = "oauth2.authority_id_seq")
+            )
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @Column(name = "authority")
-    public String getAuthority()
-    {
+    public String getAuthority() {
         return authority;
     }
 
-    public void setAuthority(String authority)
-    {
+    public void setAuthority(String authority) {
         this.authority = authority;
     }
 }

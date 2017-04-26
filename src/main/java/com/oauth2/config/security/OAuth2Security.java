@@ -23,8 +23,8 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 
 @Configuration
 @EnableWebSecurity
-public class OAuth2Security extends WebSecurityConfigurerAdapter
-{
+public class OAuth2Security extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
@@ -35,14 +35,12 @@ public class OAuth2Security extends WebSecurityConfigurerAdapter
     private Integer redisPort;
 
     @Autowired
-    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception
-    {
+    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception
-    {
+    protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .anonymous().disable()
@@ -52,14 +50,12 @@ public class OAuth2Security extends WebSecurityConfigurerAdapter
 
     @Override
     @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception
-    {
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
     @Bean
-    public JedisConnectionFactory jedisConnectionFactory()
-    {
+    public JedisConnectionFactory jedisConnectionFactory() {
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
         jedisConnectionFactory.setHostName(redisHostName);
         jedisConnectionFactory.setPort(redisPort);
@@ -68,15 +64,13 @@ public class OAuth2Security extends WebSecurityConfigurerAdapter
     }
 
     @Bean
-    public TokenStore tokenStore(JedisConnectionFactory jedisConnectionFactory)
-    {
+    public TokenStore tokenStore(JedisConnectionFactory jedisConnectionFactory) {
         return new RedisTokenStore(jedisConnectionFactory);
     }
 
     @Bean
     @Autowired
-    public TokenStoreUserApprovalHandler userApprovalHandler(TokenStore tokenStore, ClientDetailsService clientDetailsService)
-    {
+    public TokenStoreUserApprovalHandler userApprovalHandler(TokenStore tokenStore, ClientDetailsService clientDetailsService) {
         TokenStoreUserApprovalHandler handler = new TokenStoreUserApprovalHandler();
         handler.setTokenStore(tokenStore);
         handler.setRequestFactory(new DefaultOAuth2RequestFactory(clientDetailsService));
@@ -86,16 +80,14 @@ public class OAuth2Security extends WebSecurityConfigurerAdapter
 
     @Bean
     @Autowired
-    public ApprovalStore approvalStore(TokenStore tokenStore) throws Exception
-    {
+    public ApprovalStore approvalStore(TokenStore tokenStore) throws Exception {
         TokenApprovalStore store = new TokenApprovalStore();
         store.setTokenStore(tokenStore);
         return store;
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder()
-    {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

@@ -14,8 +14,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-public class SampleRestController
-{
+public class SampleRestController {
 
     @Autowired
     private UserService userService;  //Service which will do all data retrieval/manipulation work
@@ -24,11 +23,9 @@ public class SampleRestController
     //-------------------Retrieve All Users--------------------------------------------------------
 
     @RequestMapping(value = "/user/", method = RequestMethod.GET)
-    public ResponseEntity<List<User>> listAllUsers(Principal principal)
-    {
+    public ResponseEntity<List<User>> listAllUsers(Principal principal) {
         List<User> users = userService.findAllUsers();
-        if (users.isEmpty())
-        {
+        if (users.isEmpty()) {
             return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
         }
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
@@ -38,12 +35,10 @@ public class SampleRestController
     //-------------------Retrieve Single User--------------------------------------------------------
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public ResponseEntity<User> getUser(@PathVariable("id") long id)
-    {
+    public ResponseEntity<User> getUser(@PathVariable("id") long id) {
         System.out.println("Fetching User with id " + id);
         User user = userService.findById(id);
-        if (user == null)
-        {
+        if (user == null) {
             System.out.println("User with id " + id + " not found");
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
@@ -54,12 +49,10 @@ public class SampleRestController
     //-------------------Create a User--------------------------------------------------------
 
     @RequestMapping(value = "/user/", method = RequestMethod.POST)
-    public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder)
-    {
+    public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
         System.out.println("Creating User " + user.getName());
 
-        if (userService.isUserExist(user))
-        {
+        if (userService.isUserExist(user)) {
             System.out.println("A User with name " + user.getName() + " already exist");
             return new ResponseEntity<Void>(HttpStatus.CONFLICT);
         }
@@ -75,14 +68,12 @@ public class SampleRestController
     //------------------- Update a User --------------------------------------------------------
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user)
-    {
+    public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
         System.out.println("Updating User " + id);
 
         User currentUser = userService.findById(id);
 
-        if (currentUser == null)
-        {
+        if (currentUser == null) {
             System.out.println("User with id " + id + " not found");
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
@@ -98,13 +89,11 @@ public class SampleRestController
     //------------------- Delete a User --------------------------------------------------------
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<User> deleteUser(@PathVariable("id") long id)
-    {
+    public ResponseEntity<User> deleteUser(@PathVariable("id") long id) {
         System.out.println("Fetching & Deleting User with id " + id);
 
         User user = userService.findById(id);
-        if (user == null)
-        {
+        if (user == null) {
             System.out.println("Unable to delete. User with id " + id + " not found");
             return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
@@ -117,8 +106,7 @@ public class SampleRestController
     //------------------- Delete All Users --------------------------------------------------------
 
     @RequestMapping(value = "/user/", method = RequestMethod.DELETE)
-    public ResponseEntity<User> deleteAllUsers()
-    {
+    public ResponseEntity<User> deleteAllUsers() {
         System.out.println("Deleting All Users");
 
         userService.deleteAllUsers();

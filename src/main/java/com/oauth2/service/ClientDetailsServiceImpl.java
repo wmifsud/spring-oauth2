@@ -14,17 +14,15 @@ import java.util.Arrays;
  * @author waylon on 22/03/2017.
  */
 @Service
-public class ClientDetailsServiceImpl implements ClientDetailsService
-{
+public class ClientDetailsServiceImpl implements ClientDetailsService {
+
     @Autowired
     private ClientDetailsRepository clientDetailsRepository;
 
-    public org.springframework.security.oauth2.provider.ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException
-    {
+    public org.springframework.security.oauth2.provider.ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         ClientDetails client = clientDetailsRepository.findByClientId(clientId);
 
-        if(client == null)
-        {
+        if (client == null) {
             throw new ClientRegistrationException("Client not found for clientId: " + clientId);
         }
 

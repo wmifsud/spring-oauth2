@@ -9,8 +9,8 @@ import org.springframework.data.repository.query.Param;
 /**
  * @author waylon on 21/03/2017.
  */
-public interface UserDetailsRepository extends JpaRepository<UserDetails, String>
-{
+public interface UserDetailsRepository extends JpaRepository<UserDetails, String> {
+
     @EntityGraph("UserDetails.Graph.FetchAuthorities")
     @Query("SELECT u FROM UserDetails u JOIN FETCH u.clientDetailsSet c WHERE u.username = :username AND c.clientId = :clientId")
     UserDetails findByEnabledTrueAndUsernameAndClient(@Param("username") String username, @Param("clientId") String clientId);

@@ -1,7 +1,6 @@
 package com.oauth2.model;
 
-public class User
-{
+public class User {
 
     private long id;
 
@@ -11,62 +10,51 @@ public class User
 
     private double salary;
 
-    public User()
-    {
+    public User() {
         id = 0;
     }
 
-    public User(long id, String name, int age, double salary)
-    {
+    public User(long id, String name, int age, double salary) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.salary = salary;
     }
 
-    public long getId()
-    {
+    public long getId() {
         return id;
     }
 
-    public void setId(long id)
-    {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public int getAge()
-    {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(int age)
-    {
+    public void setAge(int age) {
         this.age = age;
     }
 
-    public double getSalary()
-    {
+    public double getSalary() {
         return salary;
     }
 
-    public void setSalary(double salary)
-    {
+    public void setSalary(double salary) {
         this.salary = salary;
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (id ^ (id >>> 32));
@@ -74,8 +62,7 @@ public class User
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
@@ -89,8 +76,7 @@ public class User
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "User [id=" + id + ", name=" + name + ", age=" + age
                 + ", salary=" + salary + "]";
     }

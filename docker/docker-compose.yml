@@ -1,0 +1,38 @@
+version: '3'
+services:
+
+  spring-oauth2-java:
+    image: java:openjdk-8u91-jdk
+    working_dir: /app
+    volumes:
+#    if building with maven
+      - ../target/SpringOAuth2.jar:/app/SpringOAuth2.jar
+#    if building with gradle
+#      - ../build/libs/SpringOAuth2.jar:/app/SpringOAuth2.jar
+    command: java -jar /app/SpringOAuth2.jar
+    ports:
+      - "9080:9080"
+    depends_on:
+      - spring-oauth2-db
+      - spring-oauth2-redis
+    links:
+      - spring-oauth2-db
+      - spring-oauth2-redis
+    environment:
+      JPDA_ADDRESS: 8000
+      JPDA_TRANSPORT: dt_socket
+      JPDA_SUSPEND: "y"
+
+  spring-oauth2-db:
+    build: spring-oauth2-db
+    image: spring-oauth2-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - ./spring-oauth2-db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  spring-oauth2-redis:
+      build: spring-oauth2-redis
+      image: spring-oauth2-redis

@@ -16,8 +16,8 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 // auth server class which will require client and secret for app to app authentication.
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizationServer extends AuthorizationServerConfigurerAdapter
-{
+public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
+
     @Autowired
     private TokenStore tokenStore;
 
@@ -32,21 +32,18 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter
     private AuthenticationManager authenticationManager;
 
     @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception
-    {
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.withClientDetails(clientDetailsService);
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception
-    {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler)
                  .authenticationManager(authenticationManager);
     }
 
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception
-    {
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer.realm("MY_OAUTH_REALM/client");
     }
 

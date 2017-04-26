@@ -32,6 +32,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
@@ -120,7 +124,6 @@
 				<configuration>
 					<!-- executable required to make application executable -->
 					<executable>true</executable>
-					<finalName>spring-oauth2</finalName>
 					<mainClass>com.oauth2.Main</mainClass>
 				</configuration>
 			</plugin>
@@ -133,8 +136,8 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-
 		</plugins>
+		<finalName>${project.name}</finalName>
 	</build>
 	<profiles>
 		<profile>
@@ -142,12 +145,12 @@
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
-			<properties>
-				<swagger.profile>swagger-enabled</swagger.profile>
-			</properties>
 		</profile>
 		<profile>
 			<id>docker</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
 			<build>
 				<plugins>
 					<plugin>
@@ -164,7 +167,7 @@
 										<assembly>
 											<descriptorRef>artifact</descriptorRef>
 										</assembly>
-										<cmd>java -jar maven/${project.name}-${project.version}.jar</cmd>
+										<cmd>java -jar maven/${project.name}.jar</cmd>
 									</build>
 									<run>
 										<links>
@@ -176,6 +179,7 @@
 										</ports>
 										<wait>
 											<log>Tomcat started on port</log>
+											<time>15000</time>
 										</wait>
 									</run>
 								</image>
@@ -185,7 +189,7 @@
 									<run>
 										<volumes>
 											<bind>
-												<volume>${project.basedir}/schema.sql:/docker-entrypoint-initdb.d/schema.sql</volume>
+												<volume>${project.basedir}/docker/spring-oauth2-db/schema.sql:/docker-entrypoint-initdb.d/schema.sql</volume>
 											</bind>
 										</volumes>
 										<wait>

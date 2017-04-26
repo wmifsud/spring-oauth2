@@ -21,33 +21,30 @@ import java.util.Set;
  * @author waylon on 22/03/2017.
  */
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService
-{
+public class UserDetailsServiceImpl implements UserDetailsService {
+
     @Autowired
     private UserDetailsRepository userDetailsRepository;
+
     @Autowired
     private ClientDetailsRepository clientDetailsRepository;
 
-    public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
-    {
+    public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDetails userDetails = userDetailsRepository.findByEnabledTrueAndUsernameAndClient(username, getClientIdFromSecurityContext());
 
-        if (userDetails == null)
-        {
+        if (userDetails == null) {
             throw new UsernameNotFoundException("No user found for: " + username);
         }
 
         Set<SimpleGrantedAuthority> grantedAuthorities = new HashSet<SimpleGrantedAuthority>();
-        for (Authority authority : userDetails.getAuthoritySet())
-        {
+        for (Authority authority : userDetails.getAuthoritySet()) {
             grantedAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
         }
 
         return new User(userDetails.getUsername(), userDetails.getPassword(), grantedAuthorities);
     }
 
-    private String getClientIdFromSecurityContext()
-    {
+    private String getClientIdFromSecurityContext() {
         Authentication a = SecurityContextHolder.getContext().getAuthentication();
         UsernamePasswordAuthenticationToken token = ((UsernamePasswordAuthenticationToken) a);
         User user = (User) token.getPrincipal();
