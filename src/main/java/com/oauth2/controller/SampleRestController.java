@@ -1,6 +1,11 @@
 package com.oauth2.controller;
 
+import com.oauth2.entity.Person;
+import com.oauth2.entity.Student;
+import com.oauth2.entity.Teacher;
 import com.oauth2.model.User;
+import com.oauth2.repository.StudentRepository;
+import com.oauth2.repository.TeacherRepository;
 import com.oauth2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -18,12 +23,21 @@ public class SampleRestController {
 
     @Autowired
     private UserService userService;  //Service which will do all data retrieval/manipulation work
+    @Autowired
+    private TeacherRepository teacherRepository;
+    @Autowired
+    private StudentRepository studentRepository;
 
 
     //-------------------Retrieve All Users--------------------------------------------------------
 
     @RequestMapping(value = "/user/", method = RequestMethod.GET)
     public ResponseEntity<List<User>> listAllUsers(Principal principal) {
+
+        List<Student> studentList = studentRepository.findAll();
+        List<Teacher> teacherList = teacherRepository.findAll();
+        System.out.println("Student size: " + studentList.size());
+        System.out.println("Teacher size: " + teacherList.size());
         List<User> users = userService.findAllUsers();
         if (users.isEmpty()) {
             return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND

@@ -94,3 +94,44 @@ GRANT ALL ON TABLE oauth2.user_details TO oauth2;
 GRANT ALL ON TABLE oauth2.authority TO oauth2;
 GRANT ALL ON TABLE oauth2.client_details_user_details_map TO oauth2;
 GRANT ALL ON TABLE oauth2.user_details_authority_map TO oauth2;
+
+CREATE schema users;
+
+CREATE TABLE users.person
+(
+    id bigserial PRIMARY KEY,
+    name citext NOT NULL,
+    surname citext NOT NULL,
+    id_card citext NOT NULL,
+    CONSTRAINT id_card_unique UNIQUE(id_card)
+);
+
+CREATE TABLE users.teacher
+(
+    person_id bigint NOT NULL,
+    subject citext NOT NULL,
+    CONSTRAINT fk_teacher_person_link FOREIGN KEY (person_id) REFERENCES users.person(id)
+);
+
+CREATE TABLE users.student
+(
+    person_id bigint NOT NULL,
+    current_year smallint NOT NULL,
+    lessons_per_week smallint NOT NULL,
+    CONSTRAINT fk_student_person_link FOREIGN KEY (person_id) REFERENCES users.person(id)
+);
+
+INSERT INTO users.person (name, surname, id_card)
+VALUES ('user1','surname1','123456M');
+INSERT INTO users.student (person_id, current_year, lessons_per_week)
+VALUES (1, 3, 15);
+INSERT INTO users.person (name, surname, id_card)
+VALUES ('John','Borg','654321M');
+INSERT INTO users.teacher (person_id, subject)
+VALUES (2, 'Mathematics');
+
+GRANT ALL ON SCHEMA users TO oauth2;
+
+GRANT ALL ON TABLE users.person TO oauth2;
+GRANT ALL ON TABLE users.student TO oauth2;
+GRANT ALL ON TABLE users.teacher TO oauth2;

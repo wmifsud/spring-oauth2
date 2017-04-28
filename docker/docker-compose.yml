@@ -6,22 +6,19 @@ services:
     working_dir: /app
     volumes:
 #    if building with maven
-      - ../target/SpringOAuth2.jar:/app/SpringOAuth2.jar
+#      - ../target/SpringOAuth2.jar:/app/SpringOAuth2.jar
 #    if building with gradle
-#      - ../build/libs/SpringOAuth2.jar:/app/SpringOAuth2.jar
-    command: java -jar /app/SpringOAuth2.jar
+      - ../build/libs/SpringOAuth2.jar:/app/SpringOAuth2.jar
+    command: java -jar -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n /app/SpringOAuth2.jar
     ports:
       - "9080:9080"
+      - "8000:8000"
     depends_on:
       - spring-oauth2-db
       - spring-oauth2-redis
     links:
       - spring-oauth2-db
       - spring-oauth2-redis
-    environment:
-      JPDA_ADDRESS: 8000
-      JPDA_TRANSPORT: dt_socket
-      JPDA_SUSPEND: "y"
 
   spring-oauth2-db:
     build: spring-oauth2-db
