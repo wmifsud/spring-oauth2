@@ -1,7 +1,9 @@
 package com.oauth2;
 
+import com.oauth2.entity.Person;
+import com.oauth2.entity.Student;
+import com.oauth2.entity.Teacher;
 import com.oauth2.model.AuthTokenInfo;
-import com.oauth2.model.User;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.http.*;
 import org.springframework.util.Assert;
@@ -54,7 +56,7 @@ public class SpringRestClient
     {
         RestTemplate restTemplate = new RestTemplate();
 
-        HttpEntity<String> request = new HttpEntity<String>(getHeadersWithClientCredentials());
+        HttpEntity<String> request = new HttpEntity<>(getHeadersWithClientCredentials());
         ResponseEntity<Object> response = restTemplate.exchange(AUTH_SERVER_URI + QPM_PASSWORD_GRANT, HttpMethod.POST, request, Object.class);
         LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) response.getBody();
         AuthTokenInfo tokenInfo = null;
@@ -79,26 +81,31 @@ public class SpringRestClient
     }
 
     /*
-     * Send a GET request to get list of all users.
+     * Send a GET request to get list of all persons.
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private static void listAllUsers(AuthTokenInfo tokenInfo)
+    private static void listAllPersons(AuthTokenInfo tokenInfo)
     {
         Assert.notNull(tokenInfo, "Authenticate first please......");
 
-        System.out.println("\nTesting listAllUsers API-----------");
+        System.out.println("\nTesting listAllPersons API-----------");
         RestTemplate restTemplate = new RestTemplate();
 
-        HttpEntity<String> request = new HttpEntity<String>(getHeaders());
-        ResponseEntity<List> response = restTemplate.exchange(REST_SERVICE_URI + "/user/" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
+        HttpEntity<String> request = new HttpEntity<>(getHeaders());
+        ResponseEntity<List> response = restTemplate.exchange(REST_SERVICE_URI + "/person/" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
                                                               HttpMethod.GET, request, List.class);
-        List<LinkedHashMap<String, Object>> usersMap = (List<LinkedHashMap<String, Object>>) response.getBody();
+        List<LinkedHashMap<String, Object>> personsMap = (List<LinkedHashMap<String, Object>>) response.getBody();
 
-        if (usersMap != null)
+        if (personsMap != null)
         {
-            for (LinkedHashMap<String, Object> map : usersMap)
+            for (LinkedHashMap<String, Object> map : personsMap)
             {
-                System.out.println("User : id=" + map.get("id") + ", Name=" + map.get("name") + ", Age=" + map.get("age") + ", Salary=" + map.get("salary"));
+                if (map.get("personType").equals("STUDENT")) {
+                    System.out.println("Student : id=" + map.get("id") + ", Name=" + map.get("name") + ", Surname=" + map.get("surname") + ", ID=" + map.get("idCard") + ", CurrentYear=" + map.get("currentYear") + ", LessonsPerWeek=" + map.get("lessonsPerWeek"));
+                }
+                else {
+                    System.out.println("Teacher : id=" + map.get("id") + ", Name=" + map.get("name") + ", Surname=" + map.get("surname") + ", ID=" + map.get("idCard") + ", subject=" + map.get("subject"));
+                }
             }
         }
         else
@@ -108,94 +115,102 @@ public class SpringRestClient
     }
 
     /*
-     * Send a GET request to get a specific user.
+     * Send a GET request to get a specific person.
      */
-    private static void getUser(AuthTokenInfo tokenInfo)
+    private static void getPerson(AuthTokenInfo tokenInfo)
     {
         Assert.notNull(tokenInfo, "Authenticate first please......");
-        System.out.println("\nTesting getUser API----------");
+        System.out.println("\nTesting getPerson API----------");
         RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> request = new HttpEntity<String>(getHeaders());
-        ResponseEntity<User> response = restTemplate.exchange(REST_SERVICE_URI + "/user/1" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
-                                                              HttpMethod.GET, request, User.class);
-        User user = response.getBody();
-        System.out.println(user);
+        HttpEntity<String> request = new HttpEntity<>(getHeaders());
+        ResponseEntity<Person> response = restTemplate.exchange(REST_SERVICE_URI + "/person/1" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
+                                                              HttpMethod.GET, request, Person.class);
+        Person person = response.getBody();
+        System.out.println(person);
     }
 
     /*
-     * Send a POST request to create a new user.
+     * Send a POST request to create a new person.
      */
-    private static void createUser(AuthTokenInfo tokenInfo)
+    private static void createPerson(AuthTokenInfo tokenInfo)
     {
         Assert.notNull(tokenInfo, "Authenticate first please......");
-        System.out.println("\nTesting create User API----------");
+        System.out.println("\nTesting create Person API----------");
         RestTemplate restTemplate = new RestTemplate();
-        User user = new User(0, "Sarah", 51, 134);
-        HttpEntity<Object> request = new HttpEntity<Object>(user, getHeaders());
-        URI uri = restTemplate.postForLocation(REST_SERVICE_URI + "/user/" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
-                                               request, User.class);
+        Teacher teacher = new Teacher();
+        teacher.setName("Carl");
+        teacher.setSurname("Xuereb");
+        teacher.setIdCard("111111M");
+        teacher.setSubject("Physics");
+
+        HttpEntity<Object> request = new HttpEntity<>(teacher, getHeaders());
+        URI uri = restTemplate.postForLocation(REST_SERVICE_URI + "/person/create" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
+                                               request, Teacher.class);
         System.out.println("Location : " + uri.toASCIIString());
     }
 
     /*
-     * Send a PUT request to update an existing user.
+     * Send a PUT request to update an existing person.
      */
-    private static void updateUser(AuthTokenInfo tokenInfo)
+    private static void updatePerson(AuthTokenInfo tokenInfo)
     {
         Assert.notNull(tokenInfo, "Authenticate first please......");
-        System.out.println("\nTesting update User API----------");
+        System.out.println("\nTesting update Person API----------");
         RestTemplate restTemplate = new RestTemplate();
-        User user = new User(1, "Tomy", 33, 70000);
-        HttpEntity<Object> request = new HttpEntity<Object>(user, getHeaders());
-        ResponseEntity<User> response = restTemplate.exchange(REST_SERVICE_URI + "/user/1" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
-                                                              HttpMethod.PUT, request, User.class);
+        Student student = new Student();
+        student.setName("Wayne");
+        student.setSurname("Stellini");
+        student.setIdCard("999999M");
+        HttpEntity<Object> request = new HttpEntity<>(student, getHeaders());
+        ResponseEntity<Student> response = restTemplate.exchange(REST_SERVICE_URI + "/person/1" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
+                                                              HttpMethod.PUT, request, Student.class);
         System.out.println(response.getBody());
     }
 
     /*
-     * Send a DELETE request to delete a specific user.
+     * Send a DELETE request to delete a specific person.
      */
-    private static void deleteUser(AuthTokenInfo tokenInfo)
+    private static void deletePerson(AuthTokenInfo tokenInfo)
     {
         Assert.notNull(tokenInfo, "Authenticate first please......");
         System.out.println("\nTesting delete User API----------");
         RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> request = new HttpEntity<String>(getHeaders());
-        restTemplate.exchange(REST_SERVICE_URI + "/user/3" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
-                              HttpMethod.DELETE, request, User.class);
+        HttpEntity<String> request = new HttpEntity<>(getHeaders());
+        restTemplate.exchange(REST_SERVICE_URI + "/person/3" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
+                              HttpMethod.DELETE, request, Person.class);
     }
 
 
     /*
-     * Send a DELETE request to delete all users.
+     * Send a DELETE request to delete all persons.
      */
-    private static void deleteAllUsers(AuthTokenInfo tokenInfo)
+    private static void deleteAllPersons(AuthTokenInfo tokenInfo)
     {
         Assert.notNull(tokenInfo, "Authenticate first please......");
         System.out.println("\nTesting all delete Users API----------");
         RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> request = new HttpEntity<String>(getHeaders());
-        restTemplate.exchange(REST_SERVICE_URI + "/user/" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
-                              HttpMethod.DELETE, request, User.class);
+        HttpEntity<String> request = new HttpEntity<>(getHeaders());
+        restTemplate.exchange(REST_SERVICE_URI + "/person/" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
+                              HttpMethod.DELETE, request, Person.class);
     }
 
     public static void main(String args[])
     {
         AuthTokenInfo tokenInfo = sendTokenRequest();
-        listAllUsers(tokenInfo);
+        listAllPersons(tokenInfo);
 
-        getUser(tokenInfo);
+        getPerson(tokenInfo);
 
-        createUser(tokenInfo);
-        listAllUsers(tokenInfo);
+        createPerson(tokenInfo);
+        listAllPersons(tokenInfo);
 
-        updateUser(tokenInfo);
-        listAllUsers(tokenInfo);
+        updatePerson(tokenInfo);
+        listAllPersons(tokenInfo);
 
-        deleteUser(tokenInfo);
-        listAllUsers(tokenInfo);
+        deletePerson(tokenInfo);
+        listAllPersons(tokenInfo);
 
-        deleteAllUsers(tokenInfo);
-        listAllUsers(tokenInfo);
+        deleteAllPersons(tokenInfo);
+        listAllPersons(tokenInfo);
     }
 }

@@ -135,3 +135,5 @@ GRANT ALL ON SCHEMA users TO oauth2;
 GRANT ALL ON TABLE users.person TO oauth2;
 GRANT ALL ON TABLE users.student TO oauth2;
 GRANT ALL ON TABLE users.teacher TO oauth2;
+
+GRANT ALL ON SEQUENCE users.person_id_seq TO oauth2;

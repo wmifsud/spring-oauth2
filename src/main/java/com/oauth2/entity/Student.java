@@ -1,5 +1,7 @@
 package com.oauth2.entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -10,6 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "student", schema = "users")
+@JsonTypeName("student")
 @PrimaryKeyJoinColumn(name = "person_id", referencedColumnName = "id")
 public class Student extends Person {
 
@@ -33,5 +36,10 @@ public class Student extends Person {
 
     public void setLessonsPerWeek(Integer lessonsPerWeek) {
         this.lessonsPerWeek = lessonsPerWeek;
+    }
+
+    @Override
+    public PersonType getPersonType() {
+        return PersonType.STUDENT;
     }
 }
