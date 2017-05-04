@@ -42,4 +42,19 @@ public class Student extends Person {
     public PersonType getPersonType() {
         return PersonType.STUDENT;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "currentYear=" + currentYear +
+                ", lessonsPerWeek=" + lessonsPerWeek +
+                ", id=" + id +
+                ", personType=" + getPersonType() +
+                ", name='" + name + '\'' +
+                ", id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", surname='" + getSurname() + '\'' +
+                ", idCard='" + getIdCard() + '\'' +
+                '}';
+    }
 }

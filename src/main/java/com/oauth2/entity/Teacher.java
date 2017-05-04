@@ -31,4 +31,18 @@ public class Teacher extends Person {
     public PersonType getPersonType() {
         return PersonType.TEACHER;
     }
+
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "subject='" + subject + '\'' +
+                ", personType=" + getPersonType() +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", surname='" + getSurname() + '\'' +
+                ", idCard='" + getIdCard() + '\'' +
+                '}';
+    }
 }

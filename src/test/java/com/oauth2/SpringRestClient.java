@@ -5,6 +5,8 @@ import com.oauth2.entity.Student;
 import com.oauth2.entity.Teacher;
 import com.oauth2.model.AuthTokenInfo;
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
@@ -16,6 +18,7 @@ import java.util.List;
 
 public class SpringRestClient
 {
+    private static final Logger LOG = LoggerFactory.getLogger(SpringRestClient.class);
 
     private static final String REST_SERVICE_URI = "http://localhost:9080/SpringOAuth2";
 
@@ -69,13 +72,13 @@ public class SpringRestClient
             tokenInfo.setRefresh_token((String) map.get("refresh_token"));
             tokenInfo.setExpires_in((Integer) map.get("expires_in"));
             tokenInfo.setScope((String) map.get("scope"));
-            System.out.println(tokenInfo);
-            //System.out.println("access_token ="+map.get("access_token")+", token_type="+map.get("token_type")+", refresh_token="+map.get("refresh_token")
+            LOG.info(tokenInfo.toString());
+            //LOG.info("access_token ="+map.get("access_token")+", token_type="+map.get("token_type")+", refresh_token="+map.get("refresh_token")
             //+", expires_in="+map.get("expires_in")+", scope="+map.get("scope"));;
         }
         else
         {
-            System.out.println("No user exist----------");
+            LOG.info("No user exist----------");
         }
         return tokenInfo;
     }
@@ -88,7 +91,7 @@ public class SpringRestClient
     {
         Assert.notNull(tokenInfo, "Authenticate first please......");
 
-        System.out.println("\nTesting listAllPersons API-----------");
+        LOG.info("Testing listAllPersons API-----------");
         RestTemplate restTemplate = new RestTemplate();
 
         HttpEntity<String> request = new HttpEntity<>(getHeaders());
@@ -101,16 +104,16 @@ public class SpringRestClient
             for (LinkedHashMap<String, Object> map : personsMap)
             {
                 if (map.get("personType").equals("STUDENT")) {
-                    System.out.println("Student : id=" + map.get("id") + ", Name=" + map.get("name") + ", Surname=" + map.get("surname") + ", ID=" + map.get("idCard") + ", CurrentYear=" + map.get("currentYear") + ", LessonsPerWeek=" + map.get("lessonsPerWeek"));
+                    LOG.info("Student : id=" + map.get("id") + ", Name=" + map.get("name") + ", Surname=" + map.get("surname") + ", ID=" + map.get("idCard") + ", CurrentYear=" + map.get("currentYear") + ", LessonsPerWeek=" + map.get("lessonsPerWeek"));
                 }
                 else {
-                    System.out.println("Teacher : id=" + map.get("id") + ", Name=" + map.get("name") + ", Surname=" + map.get("surname") + ", ID=" + map.get("idCard") + ", subject=" + map.get("subject"));
+                    LOG.info("Teacher : id=" + map.get("id") + ", Name=" + map.get("name") + ", Surname=" + map.get("surname") + ", ID=" + map.get("idCard") + ", subject=" + map.get("subject"));
                 }
             }
         }
         else
         {
-            System.out.println("No user exist----------");
+            LOG.info("No persons exist----------");
         }
     }
 
@@ -120,13 +123,13 @@ public class SpringRestClient
     private static void getPerson(AuthTokenInfo tokenInfo)
     {
         Assert.notNull(tokenInfo, "Authenticate first please......");
-        System.out.println("\nTesting getPerson API----------");
+        LOG.info("\nTesting getPerson API----------");
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> request = new HttpEntity<>(getHeaders());
         ResponseEntity<Person> response = restTemplate.exchange(REST_SERVICE_URI + "/person/1" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
                                                               HttpMethod.GET, request, Person.class);
         Person person = response.getBody();
-        System.out.println(person);
+        LOG.info(person.toString());
     }
 
     /*
@@ -135,7 +138,7 @@ public class SpringRestClient
     private static void createPerson(AuthTokenInfo tokenInfo)
     {
         Assert.notNull(tokenInfo, "Authenticate first please......");
-        System.out.println("\nTesting create Person API----------");
+        LOG.info("Testing create Person API----------");
         RestTemplate restTemplate = new RestTemplate();
         Teacher teacher = new Teacher();
         teacher.setName("Carl");
@@ -146,7 +149,7 @@ public class SpringRestClient
         HttpEntity<Object> request = new HttpEntity<>(teacher, getHeaders());
         URI uri = restTemplate.postForLocation(REST_SERVICE_URI + "/person/create" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
                                                request, Teacher.class);
-        System.out.println("Location : " + uri.toASCIIString());
+        LOG.info("Location : {}", uri.toASCIIString());
     }
 
     /*
@@ -155,7 +158,7 @@ public class SpringRestClient
     private static void updatePerson(AuthTokenInfo tokenInfo)
     {
         Assert.notNull(tokenInfo, "Authenticate first please......");
-        System.out.println("\nTesting update Person API----------");
+        LOG.info("Testing update Person API----------");
         RestTemplate restTemplate = new RestTemplate();
         Student student = new Student();
         student.setName("Wayne");
@@ -164,7 +167,7 @@ public class SpringRestClient
         HttpEntity<Object> request = new HttpEntity<>(student, getHeaders());
         ResponseEntity<Student> response = restTemplate.exchange(REST_SERVICE_URI + "/person/1" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
                                                               HttpMethod.PUT, request, Student.class);
-        System.out.println(response.getBody());
+        LOG.info(response.getBody().toString());
     }
 
     /*
@@ -173,7 +176,7 @@ public class SpringRestClient
     private static void deletePerson(AuthTokenInfo tokenInfo)
     {
         Assert.notNull(tokenInfo, "Authenticate first please......");
-        System.out.println("\nTesting delete User API----------");
+        LOG.info("Testing delete Person API----------");
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> request = new HttpEntity<>(getHeaders());
         restTemplate.exchange(REST_SERVICE_URI + "/person/3" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
@@ -187,7 +190,7 @@ public class SpringRestClient
     private static void deleteAllPersons(AuthTokenInfo tokenInfo)
     {
         Assert.notNull(tokenInfo, "Authenticate first please......");
-        System.out.println("\nTesting all delete Users API----------");
+        LOG.info("Testing all delete Users API----------");
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> request = new HttpEntity<>(getHeaders());
         restTemplate.exchange(REST_SERVICE_URI + "/person/" + QPM_ACCESS_TOKEN + tokenInfo.getAccess_token(),
